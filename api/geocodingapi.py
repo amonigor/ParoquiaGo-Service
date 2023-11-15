@@ -1,11 +1,13 @@
 import requests
 import json
 import os
+from dotenv import load_dotenv
 
 class Geocoding:
     def __init__(self):
-        self.key = os.environ.get('GOOGLE_MAPS_API_KEY')
-        self.url = os.environ.get('GEOCODING_URL')
+        load_dotenv()
+        self.key = os.getenv('GOOGLE_MAPS_API_KEY')
+        self.url = os.getenv('GEOCODING_URL')
 
     def get_location(self, address):
         res = requests.get(
