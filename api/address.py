@@ -1,13 +1,11 @@
 import requests
 import json
 import os
-from dotenv import load_dotenv
 from geocodingapi import Geocoding
 
 class Address:
     def __init__(self):
-        load_dotenv()
-        self.base_url = os.getenv('DIOCESE_API_URL')
+        self.base_url = os.environ.get('DIOCESE_API_URL')
 
     def extract_address(self, text):
         text = text.strip()

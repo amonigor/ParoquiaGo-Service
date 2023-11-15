@@ -1,6 +1,5 @@
 from flask import Flask
 from address import Address
-from geocodingapi import Geocoding
 
 app = Flask(__name__)
 
