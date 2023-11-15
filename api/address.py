@@ -32,7 +32,7 @@ class Address:
     def get_data(self):
         geocoding = Geocoding()
 
-        return [geocoding.get_location(), self.base_url]
+        return [geocoding.get_location(''), self.base_url]
 
         churches = self.get_church_list()
         data = {
