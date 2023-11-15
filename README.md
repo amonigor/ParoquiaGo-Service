@@ -16,3 +16,9 @@ Verificar se cumpre com os requisitos para o desenvolvimento, se sim basta rodar
 ```bash
 flask --app api/index.py --debug run
 ```
+
+### Instalar uma nova dependência ao projeto:
+Caso uma nova feature precisou de uma nova dependência para ser instalada, rode o seguinte comando para atualizar o ```requirements.txt``` do projeto:
+```bash
+pip freeze > requirements.txt
+```
