@@ -8,6 +8,7 @@ class Geocoding:
         self.url = os.environ.get('GEOCODING_URL')
 
     def get_location(self, address):
+        return [self.key, self.url]
         res = requests.get(
             self.url,
             {
