@@ -1,5 +1,5 @@
 from flask import Flask
-from address import Address
+from api.address import Address
 
 app = Flask(__name__)
 

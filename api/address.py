@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-from geocodingapi import Geocoding
+from api.geocodingapi import Geocoding
 
 class Address:
     def __init__(self):
@@ -31,6 +31,7 @@ class Address:
 
     def get_data(self):
         geocoding = Geocoding()
+
         churches = self.get_church_list()
         data = {
             "count": 0,
