@@ -1,7 +1,7 @@
 import requests
 import json
 import os
-from geocodingapi import Geocoding
+from api.geocodingapi import Geocoding
 
 class Address:
     def __init__(self):
