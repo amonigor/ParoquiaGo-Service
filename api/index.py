@@ -1,7 +1,14 @@
 from flask import Flask
+from address import Address
+from geocodingapi import Geocoding
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello_world():
-    return "Hello, World!"
+    return "ParoquiaGo - Service"
+
+@app.route("/get-churches")
+def get_churches():
+    address = Address()
+    return address.get_data()
