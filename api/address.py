@@ -11,10 +11,12 @@ class Address:
 
     def extract_address(self, text):
         text = text.strip()
+        text = text.lower()
         text = text.replace('\\', '')
-        text = text.replace('Endereço:', 'Endereco:')
-        text = text.replace('Enderaço:', 'Endereco:')
-        text = text.replace('Enderaco:', 'Endereco:')
+        text = text.replace('endereço', 'endereco')
+        text = text.replace('enderaço', 'endereco')
+        text = text.replace('enderaco', 'endereco')
+        text = text.replace('endereco :', 'endereco:')
         text = text.replace('<strong>', '')
         text = text.replace('</strong>', '')
         text = text.replace('&nbsp;', '')
@@ -22,7 +24,7 @@ class Address:
         text = text.replace('(<a', '&&&')
         text = text.replace('<br', '&&&')
         text = text.replace('</p', '&&&')
-        start = text.find('Endereco:') + 9
+        start = text.find('endereco:') + 9
         end = text.find('&&&', start)
         return text[start:end].strip()
 
