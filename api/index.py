@@ -1,5 +1,6 @@
 from flask import Flask
 from api.address import Address
+from api.news import News
 
 app = Flask(__name__)
 
@@ -11,3 +12,8 @@ def hello_world():
 def get_churches():
     address = Address()
     return address.get_data()
+
+@app.route("/get-news")
+def get_news():
+    news = News()
+    return news.get_data()
