@@ -16,4 +16,4 @@ def get_churches():
 @app.route("/get-news")
 def get_news():
     news = News()
-    return news.get_data()
+    return news.get_news()

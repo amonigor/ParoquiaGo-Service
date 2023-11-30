@@ -1,67 +1,35 @@
+import requests
 import json
-import time
 import os
-from selenium import webdriver
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+from datetime import datetime
 
 class News:
     def __init__(self):
         load_dotenv()
-        self.url = os.getenv('NEWS_URL')
-        self.token = os.getenv('GITHUB_TOKEN')
+        self.news_url = os.getenv('NEWS_URL')
 
-    def get_data(self):
-        # INICIALIZA O NAVEGADOR
-        options = Options()
-        options.add_argument('-headless')
-        os.environ['GH_TOKEN'] = self.token
-        service = Service(GeckoDriverManager().install())
-        driver = webdriver.Firefox(options=options, service=service)
-        driver.maximize_window()
-        driver.get(self.url)
+    def get_news(self):
+        headers = {'x-requested-with':'root_URL_Of_Endpoint', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36'}
+        response = requests.get(self.news_url, headers=headers)
+        soup = BeautifulSoup(response.content, features='html.parser')
 
-        # COMEÇA A RASPAGEM
-        cookiesButton = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CLASS_NAME, 'pjAcceptCookieBarBtn')))
-        cookiesButton.click()
-
-        limit = driver.find_element(By.CSS_SELECTOR, '#limit')
-        limitOption = driver.find_element(By.CSS_SELECTOR, '#limit > option:nth-child(9)')
-        limit.click()
-        limitOption.click()
-
-        time.sleep(1)
-
-        news = driver.find_elements(By.CSS_SELECTOR, '.list-title > a')
-        dates = driver.find_elements(By.CSS_SELECTOR, '.list-date')
-        newsList = []
-
-        for i, new in enumerate(news):
-            header = str(new.get_attribute('innerHTML'))
-            header = header.replace('\t', '')
-            header = header.replace('\n', '')
-            
-            date = str(dates[i].get_attribute('innerHTML'))
-            date = date.replace('\t', '')
-            date = date.replace('\n', '')
-            date = date.replace('-', '/')
-
-            newsList.append({
-                'header': header,
-                'link': new.get_attribute('href'),
-                'date': date,
-            })
+        tableRows = soup.find_all('tr', {'class': 'cat-list-row0'})
 
         data = {
-            'count': len(newsList),
-            'data': newsList,
+            "count": 0,
+            "data": []
         }
 
-        driver.quit()
+        for row in tableRows:
+            newRow = list(filter(lambda content: content != '\n', row.contents))
+            data['data'].append({
+                'link': self.news_url + '/' + newRow[0].find('a', href=True)['href'].replace('/noticias/presenca-diocesana/noticias/', ''),
+                'title': newRow[0].find('a').get_text().replace('\n', '').replace('\t', ''),
+                'date': datetime.strptime(newRow[1].get_text().replace('\n', '').replace('\t', ''), '%d-%m-%Y').isoformat()
+            })
+        
+        data['count'] = len(data['data'])
+
         return json.dumps(data, indent=4)
