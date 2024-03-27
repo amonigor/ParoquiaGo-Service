@@ -29,7 +29,7 @@ class Address:
         return text[start:end].strip()
 
     def get_church_list(self):
-        response = requests.get(self.base_url + "/api/index.php/v1/mini/paroquias")
+        response = requests.get(self.base_url + "/api/index.php/v1/mini/Paroquias")
         churches = json.loads(response.content)
         return churches['data']
 
