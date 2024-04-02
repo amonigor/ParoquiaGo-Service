@@ -17,6 +17,10 @@ class Address:
         text = text.replace('enderaço', 'endereco')
         text = text.replace('enderaco', 'endereco')
         text = text.replace('endereco :', 'endereco:')
+
+        if 'endereco' not in text:
+            return None
+
         text = text.replace('<strong>', '')
         text = text.replace('</strong>', '')
         text = text.replace('&nbsp;', '')
@@ -26,6 +30,7 @@ class Address:
         text = text.replace('</p', '&&&')
         start = text.find('endereco:') + 9
         end = text.find('&&&', start)
+
         return text[start:end].strip()
 
     def get_church_list(self):
@@ -45,6 +50,8 @@ class Address:
         for church in churches:
             if (church['state'] != 2): 
                 address = self.extract_address(church['fulltext'] if church['fulltext'] else church['introtext'])
+                if not address:
+                    continue
                 data['data'].append(
                     {
                         "id": church['id'],
